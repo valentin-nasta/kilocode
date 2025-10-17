@@ -409,7 +409,6 @@ const AppWithProviders = () => (
 			<TranslationProvider>
 				<QueryClientProvider client={queryClient}>
 					<TooltipProvider delayDuration={STANDARD_TOOLTIP_DELAY}>
-						{/* kilocode_change: No provider needed - using hook approach */}
 						<App />
 					</TooltipProvider>
 				</QueryClientProvider>

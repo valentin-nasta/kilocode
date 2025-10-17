@@ -14,20 +14,16 @@ export const AutoReleaseNotesChecker: React.FC = () => {
 		if (!SHOULD_AUTO_OPEN) return
 
 		let mounted = true
-
 		const checkAndAutoOpen = async () => {
 			try {
 				const hasUnviewed = await hasUnviewedReleases()
-
 				if (!mounted || !hasUnviewed) return
 
-				// Load releases and delay before auto-opening
 				await loadReleases()
 
 				setTimeout(() => {
 					if (mounted) {
 						setShowModal(true)
-						// Mark current version as viewed when auto-opening
 						markAsViewed(currentVersion)
 					}
 				}, AUTO_OPEN_DELAY_MS)
@@ -35,7 +31,6 @@ export const AutoReleaseNotesChecker: React.FC = () => {
 				console.warn("Failed to check for unviewed releases:", error)
 			}
 		}
-
 		checkAndAutoOpen()
 
 		return () => {

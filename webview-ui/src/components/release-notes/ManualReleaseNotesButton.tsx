@@ -3,29 +3,27 @@ import React, { useState } from "react"
 import { FileText } from "lucide-react"
 import { Button } from "../ui"
 import { ReleaseNotesModal } from "./ReleaseNotesModal"
+import { useAppTranslation } from "@/i18n/TranslationContext"
 
 interface ManualReleaseNotesButtonProps {
-	/**
-	 * Custom button text (optional)
-	 */
 	buttonText?: string
-	/**
-	 * Custom CSS classes for the button
-	 */
 	className?: string
 }
 
 export const ManualReleaseNotesButton: React.FC<ManualReleaseNotesButtonProps> = ({
-	buttonText = "View Release Notes",
+	buttonText,
 	className = "w-40",
 }) => {
+	const { t } = useAppTranslation()
 	const [showModal, setShowModal] = useState(false)
+
+	const displayText = buttonText || t("kilocode:releaseNotes.viewReleaseNotes")
 
 	return (
 		<>
 			<Button onClick={() => setShowModal(true)} className={className}>
 				<FileText className="p-0.5" />
-				{buttonText}
+				{displayText}
 			</Button>
 
 			{showModal && <ReleaseNotesModal isOpen onClose={() => setShowModal(false)} />}
