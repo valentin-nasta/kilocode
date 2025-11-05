@@ -1,9 +1,14 @@
 name: Publish Extension
 on:
     workflow_dispatch:
+        inputs:
+            rollback_source_version:
+                description: "[Rollback] Source git tag (e.g., v4.115.0) - leave empty for normal publish"
+                required: false
+                type: string
 
 env:
-    GIT_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+    GIT_REF: ${{ inputs.rollback_source_version || (github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main') }}
     NODE_VERSION: 20.19.2
     PNPM_VERSION: 10.8.1
     TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -34,6 +39,9 @@ jobs:
               run: |
                   git config user.name "github-actions[bot]"
                   git config user.email "github-actions[bot]@users.noreply.github.com"
+            - name: Set rollback version
+              if: ${{ inputs.rollback_source_version != '' }}
+              run: node scripts/set-rollback-version.js ${{ inputs.rollback_source_version }}
             - name: Create .env file
               run: echo "KILOCODE_POSTHOG_API_KEY=${{ secrets.POSTHOG_API_KEY }}" >> .env
             - name: Package Extension
@@ -107,8 +115,12 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
+                  ref: ${{ env.GIT_REF }}
                   submodules: recursive
                   lfs: true
+            - name: Set rollback version
+              if: ${{ inputs.rollback_source_version != '' }}
+              run: node scripts/set-rollback-version.js ${{ inputs.rollback_source_version }}
             - name: Install pnpm
               uses: pnpm/action-setup@v4
               with:
