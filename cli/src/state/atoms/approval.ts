@@ -362,7 +362,7 @@ export const executeSelectedCallbackAtom = atom<(() => Promise<void>) | null>(nu
  * Action atom to approve the pending request
  * Calls the callback set by the hook
  */
-export const approveAtom = atom(null, async (get, set) => {
+export const approveAtom = atom(null, async (get, _set) => {
 	const callback = get(approveCallbackAtom)
 	if (callback) {
 		await callback()
@@ -373,7 +373,7 @@ export const approveAtom = atom(null, async (get, set) => {
  * Action atom to reject the pending request
  * Calls the callback set by the hook
  */
-export const rejectAtom = atom(null, async (get, set) => {
+export const rejectAtom = atom(null, async (get, _set) => {
 	const callback = get(rejectCallbackAtom)
 	if (callback) {
 		await callback()
@@ -384,7 +384,7 @@ export const rejectAtom = atom(null, async (get, set) => {
  * Action atom to execute the currently selected option
  * Calls the callback set by the hook
  */
-export const executeSelectedAtom = atom(null, async (get, set) => {
+export const executeSelectedAtom = atom(null, async (get, _set) => {
 	const callback = get(executeSelectedCallbackAtom)
 	if (callback) {
 		await callback()
